@@ -96,11 +96,11 @@ Optional provides a number of convenience methods, some of which are highlighted
 // invalid value.
 Car fastestCar = getFastest(cars).orElse(Car.INVALID);
 
-// If the orElse case is expensive to calculate, we can also use a Supplier
+// If the orElse case is expensive to calculate, we can also use a Supplier
 // to only generate the alternate value if the Optional is empty
 Car fastestCar = getFastest(cars).orElseGet(() -> searchTheWeb());
 
-// We could alternatively throw an exception
+// We could alternatively throw an exception
 Car fastestCar = getFastest(cars).orElseThrow(MissingCarsException::new);
 
 // We can also provide a lambda expression to operate on the value, if it
