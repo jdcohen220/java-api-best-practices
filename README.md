@@ -27,6 +27,12 @@ API has to be thought of as a contract - when we make available API to other dev
 
 Having said this, there is a time when API experimentation is the right thing to do - and that it during the journey from initial idea conception until we reach the 1.0.0 release of our API. Even if we don't need to version our APIs, as they are only to be used by ourselves, we should be cognisant of where this boundary lies, that separates 'experimentation time' from 'business time'.
 
+> TODO Cover topics like justifying everything, "why do you need this?", the cost of API (maintenance, etc)
+
+## Consistency
+
+> TODO
+
 ## API Documentation
 
 There are two kinds of document that are critical to developers, JavaDoc and more in-depth articles. Both of these are equally important to developers, but it is important to understand that they serve different purposes. In this refcard we will cover JavaDoc, as it is more relevant to our interests as API designers.
