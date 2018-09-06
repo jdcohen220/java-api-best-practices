@@ -6,7 +6,7 @@ As engineers we write code every day, and it is inconceivable that this code wou
 
 Software is built from APIs - we make use of the JDK, and numerous dependencies brought in from tools such as Maven or Gradle, on a daily basis. But this ignores my central thesis: that we are all API designers, and we are all therefore responsible for crafting something for others to use. The term 'crafting' is used deliberately here. Too often software engineering gets wrapped up in the formality of engineering, but API design is as much, if not moreso, an art form that requires creativity and a gut feeling to be developed over many years.
 
-API design has had numerous books dedicated to it. This refcard will necessarily cover far less than this, but it will hopefully give readers a chance to consider ways in which their software development can be improved. Thanks to Microsoft for funding the creation of this refcard.
+API design has had numerous books dedicated to it. This refcard, out of necessity, will cover far less than this, but it will hopefully give readers a chance to consider ways in which their software development skills can be improved.
 
 ## API Characteristics
 
@@ -25,19 +25,17 @@ These six criteria have proven to be useful when considering if an API is high q
 
 API has to be thought of as a contract - when we make available API to other developers, we are promising them certain functionality. It is often hard for engineers to leave their code alone, as they imagine new and better approaches (even when not working). Thinking that we should revise our API, to attempt to make it better, is to only be done after much consideration, as by doing this we risk introducing breaking changes and bugs to the developers down stream from us.
 
-Having said this, there is a time when API experimentation is the right thing to do - and that it during the journey from initial idea conception until we reach the 1.0.0 release of our API. Even if we don't need to version our APIs, as they are only to be used by ourselves, we should be cognisant of where this boundary lies, that separates 'experimentation time' from 'business time'.
+Having said this, there is a time when API experimentation is the right thing to do - and that is during the journey from initial idea conception until we reach the 1.0.0 release of our API. Even if we don't need to version our APIs, as they are only to be used by ourselves, we should be cognisant of where this boundary lies, that separates 'experimentation time' from 'business time'.
 
-> TODO Cover topics like justifying everything, "why do you need this?", the cost of API (maintenance, etc)
-
-## Consistency
-
-> TODO
+> TODO Cover topics like justifying everything, "why do you need this?", the cost of API (maintenance, etc), Java New Date/Time example
 
 ## API Documentation
 
-There are two kinds of document that are critical to developers, JavaDoc and more in-depth articles. Both of these are equally important to developers, but it is important to understand that they serve different purposes. In this refcard we will cover JavaDoc, as it is more relevant to our interests as API designers.
+There are two kinds of document that are critical to developers, JavaDoc and more in-depth articles, such as those Microsoft publishes for [Java on Azure](https://docs.microsoft.com/java/azure/?WT.mc_id=link-refcard-jogiles). Both of these are equally important to developers, but it is important to understand that they serve different purposes. In this refcard we will cover JavaDoc, as it is more relevant to our interests as API designers.
 
 JavaDoc is intended to give a developer an overview of the API - it can be considered the 'what' in terms of the contract offered by the API. Engineers responsible for writing API should consider it part of their job to ensure that a JavaDoc is complete, with class-level and method-level overviews, specifying the expected inputs, outputs, exceptional circumstances, and any other detail (without going into detail regarding implementation).
+
+In an ideal world, the effort to create high quality JavaDoc would go a step further, to also include code snippets that users can copy/paste into their own software to kick start their own development. These code snippets need not be long screeds of code - it is best if they are constrained to no more than five to ten lines of code - and they can be added to the generated JavaDoc over time as users start to ask questions on the API.
 
 The value of JavaDoc extends beyond offering it to other developers - it can also help us. This is because JavaDoc gives us a filtered view of our SDK by only showing API that is intended for public use. If we establish a routine of regularly generating JavaDoc we can review our API for issues such as missing JavaDoc, leaking implementation classes or methods, and other things that aren't what we expect.
 
@@ -46,6 +44,21 @@ As most Java projects are based on Maven or Gradle, generating JavaDocs for a pr
 ### JavaDoc Tags
 
 JavaDoc ships with a [number of tags](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html#CHDJFCCC) such as `@link`, `@param`, and `@return`, which provide more context to the JavaDoc tooling, and which therefore enables a richer experience when HTML output is generated. It is extremely useful when writing JavaDoc content to keep these in the back of your mind, to ensure that they are all used. To understand when to use each of these tags, refer to the ['Tag Comments` section](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html#CHDJFCCC).
+
+## Consistency
+
+Very rarely these days does software get developed by a single person, and even if it did, the human condition is so fickle that what they deem is great one day may be dead wrong the next. Fortunately, as we design API, we have a clear record of the decisions we have made in the form of our public API, and it can be quite easy to spot when something is deviating from this forming convention.
+
+The short term benefit to having consistent API is that we reduce the risk of frustrating our users, and the long term benefit is that a consistent API ensures that when an end user arrives at a new section of your API, that they are more readily able to intuit how it should be used.
+
+Some of the more important considerations around consistency include:
+
+* Return types, e.g. List / Collection / Iterator / Iterable / Stream
+* Method naming patterns
+* Argument order
+* Consistent instantiation process
+
+> TODO more detail on above points
 
 ## Minimize API
 
@@ -176,5 +189,8 @@ Having said this, developers should have some reticence to creating their own fu
 
 Developers can choose to use these functional interfaces in lieu of creating their own, but there are still valid reasons for creating a custom functional interface. Examples include wanting a more descriptive name for the interface (for example, `Comparator` is a very expressive name for the function it serves), and wanting to introduce additional functionality (default methods in interfaces, or non-abstract methods in classes).
 
-
 ## Conclusion
+
+This document has covered an array of considerations that all engineers should have in the back of their mind whenever they are writing code that has any public API. At a high level, readers should put this refcard down with an appreciation for the importance of considered API design. If it wasn't already present, readers should start to sense that there is an art form to API design, and that improving our skills in this area comes about through practice and feedback - from our mentors and from our users. As with many art forms, API design succeeds not by seeing how much can be put in, but by seeing how much can be taken out. The challenge therefore is minimalism, it is consistency, it is intentionalism, and above all, it is consideration - for API, but more importantly, for the end user of the API. We must constantly practice developer empathy to ensure we keep our end users needs sharply in perspective.
+
+Regardless of whether we are writing API for our own consumption, for others in our organization, or more broadly as part of an open source project or commercial library, taking into consideration the values outlined in this refcard will hopefully help to direct readers to a higher quality and more professional outcome. This should not be looked at simply as 'more work', but as a challenge to ourselves, to fixate on the artistic endeavour of making an enjoyable, functional, productive API for our users.
