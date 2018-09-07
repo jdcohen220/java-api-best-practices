@@ -4,7 +4,7 @@
 
 As engineers we write code every day, and it is inconceivable that this code would ever exist in a vacuum, isolated from all other software ever written. Never has the 'standing on the shoulders of giants' metaphor been more apt than it is today in software engineering, with GitHub, Stack Overflow, Maven Central, and all other directories of code, support, and software libraries available at our fingertips.
 
-Software is built from APIs - we make use of the JDK, and numerous dependencies brought in from tools such as Maven or Gradle, on a daily basis. If you were to ask a room full of software engineers if they were API developers, their response is usually that no, they are not. This is incorrect! Anyone who has ever crafted a public class or public method should consider themselves an API developer. The term 'crafting' is used deliberately here. Too often software engineering gets wrapped up in the formality of engineering, but API design is as much, if not moreso, an art form that requires creativity and a gut feeling to be developed over many years.
+Software is built from Application Programming Interfaces (APIs) - we make use of the JDK, and numerous dependencies brought in from tools such as Maven or Gradle, on a daily basis. If you were to ask a room full of software engineers if they were API developers, their response is usually that no, they are not. This is incorrect! Anyone who has ever crafted a public class or public method should consider themselves an API developer. The term 'crafting' is used deliberately here. Too often software engineering gets wrapped up in the formality of engineering, but API design is as much, if not moreso, an art form that requires creativity and a gut feeling to be developed over many years.
 
 API design has had numerous books dedicated to it. This refcard, out of necessity, will cover far less than this, but it will hopefully give readers a chance to consider ways in which their software development skills can be improved through considered API design.
 
@@ -16,7 +16,7 @@ There are many criteria through which an API can be characterized, six of which 
 * **Well-documented:** Because we expect others to use our APIs, we should put in the effort to document it. Our focus in this refcard is on high-quality, detailed JavaDoc content.
 * **Consistent:** A good API should not surprise its users, and one way we can fail at this is by not being consistent.
 * **Fit for purpose:** In developing an API we must ensure that we target it at the right level for the intended user.
-* **Restrained:** Writing API is very cheap, but we should not mistake the cost of writing API as the full cost over its lifetime.
+* **Restrained:** Creating new API can happen almost too quickly - a few taps on the keyboard - but we should remember that for every commitment, we are committing to a lifetime of support.
 * **Evolvable:** For every API decision we make, we are potentially backing ourselves into another corner. As we make API decisions, we must take the time to view them in the wider context of the future releases of the SDK.
 
 These six criteria have proven to be useful when considering if an API is high quality, but there are certain to be many other criteria teams can apply to their process. The main aspiration a team should have after reading this refcard is to define their own criteria through which they can judge and review their API.
@@ -33,7 +33,7 @@ The easiest API to maintain is no API at all, and it is therefore extremely impo
 
 ## API Documentation
 
-There are two kinds of document that are critical to developers when working with an SDK: JavaDoc, and more in-depth articles, such as those Microsoft publishes for [Java on Azure](https://docs.microsoft.com/java/azure/?WT.mc_id=link-refcard-jogiles). Both of these are equally important to developers, but it is important to understand that they serve different purposes. In this refcard we will cover JavaDoc, as it is more relevant to our interests as API designers.
+There are two kinds of document that are critical to developers when working with an SDK: JavaDoc, and more in-depth articles, such as those Microsoft publishes for [Java on Azure](https://docs.microsoft.com/java/azure/?WT.mc_id=link-refcard-jogiles). Both of these are equally important to developers, but it is important to understand that they serve different purposes. In this refcard we will cover JavaDoc, as it is more relevant to our interests as API developers.
 
 JavaDoc is intended to give a developer an overview of the API. Engineers responsible for writing API should consider it part of their job to ensure that a JavaDoc is complete, with class-level and method-level overviews, specifying the expected inputs, outputs, exceptional circumstances, and any other detail (without going into detail regarding implementation).
 
@@ -62,12 +62,12 @@ Some of the more important considerations around consistency include:
 
 ## Minimize API
 
-It is the natural instinct of an API designer to want to write as much API as they can - to offer more convenience rather than less - but this leads to two concerns:
+It is the natural instinct of an API developer to want to write as much API as they can - to offer more convenience rather than less - but this leads to two concerns:
 
 1. It can lead to API overload: developers are required to scan through and understand more API than is necessary to complete their job.
 2. The more API we expose, the greater the maintenance burden we place on our future selves.
 
-All API designers should start by understanding the critical use cases required for their API, and design their API to support these use cases. They should fight the urge to add more convenience (thinking to themselves that by adding a new method will save developers from writing a few more lines of code).
+All API developers should start by understanding the critical use cases required for their API, and design their API to support these use cases. They should fight the urge to add more convenience (thinking to themselves that by adding a new method will save developers from writing a few more lines of code).
 
 A related aspect to this is to ensure that implementation classes do not 'leak' out into public API. Appropriate measures should be taken to ensure implementation classes are hidden. There are two main approaches to doing this:
 
@@ -87,6 +87,14 @@ If we discover that we are exposing external dependencies in our API, we should 
 As an API developer, we must strike a balance between offering developers the functionality and flexibility that they need to perform their jobs, and the ability for ourselves to evolve our API over time. One way to ensure we, as API developers, retain some level of control is to make use of the `final` keyword. By making our classes or methods `final`, we are signalling to developers that, at this point in time, they cannot consider extending or overriding these particular classes and methods.
 
 It has to be said that this is not particularly popular for developers, as no one likes being told that they can't do something. Despite this, it is better to err on the side of caution when developing APIs, and if there is not sufficient certainty that the API is right for extension, using the `final` keyword helps to keep some power back for the API developer to improve the situation in the future. The `final` keyword, after all, can always be removed in a subsequent release, but it is not a wise idea to make something `final` after it has already been released.
+
+## Backwards Compatibility
+
+This refcard, up until now, has skirted around the issue of how exactly to evolve an API. The basic advice is that adding new API is generally fine, but removing or changing existing API is not. The reason for this is essentially because adding API is (generally) backwards compatible, whereas removing or changing existing API is backwards incompatible. In other words, when we remove or change existing API, we run the risk of breaking our users when they upgrade to our next release - if they relied on this API that no longer exists in the form their code expects.
+
+Sometimes we must make backwards incompatible changes, for example if we made a mistake in our API design or if we overlooked some aspect of the requirements that requires a different approach. The challenge is to do this in a way that is clearly communicated to our users, whenever possible. Making use of the `@Deprecated` annotation (and related `@deprecated` JavaDoc tag) is a good first step, but this only works when we have a clearly articulated policy regarding when we permit breaking changes in a release. A common approach to this is to subscribe to the [semantic versioning](https://semver.org/) policy of only making incompatible API changes in major releases (that is, in the versioning scheme MAJOR.MINOR.PATCH, where the MAJOR value is incremented). In this approach, anything that you plan to change or remove is marked as deprecated, but not removed or modified until the next major release. If this policy is to be used, it is important to communicate this outwardly, so that users of your API can be certain of this plan.
+
+On the other side of the coin is the case where there is accidental API breaks, introduced by developers who are unaware of the implications of a change they have made. This happens more often than ideal, and is more often than not very hard to notice. Tools exist to watch API changes, and to notify you of backwards incompatibilities that have been introduced. [Revapi](https://revapi.org/) is one such tool that continues to prove its worth to projects inside of Microsoft.
 
 ## Don't Return null
 
@@ -166,7 +174,7 @@ For these reasons, when we write API it is important that we consider the necess
 
 ## Functional Interfaces
 
-In Java 8 the `@FunctionalInterface` annotation was introduced, allowing API designers to designate that a particular class is intended for use in lambda expressions. It is not necessary that a class have this annotation, but by having this associated with a class, it enables the compiler to enforce that the class has exactly one abstract method, which is the requirement for supporting lambda expressions.
+In Java 8 the `@FunctionalInterface` annotation was introduced, allowing API developers to designate that a particular class is intended for use in lambda expressions. It is not necessary that a class have this annotation, but by having this associated with a class, it enables the compiler to enforce that the class has exactly one abstract method, which is the requirement for supporting lambda expressions.
 
 From a developers point of view this is beneficial as it ensures that a class intended for use in lambda expressions does not accidentally lose that ability with the introduction of additional abstract methods - because the compiler will not allow this situation to arise.
 
